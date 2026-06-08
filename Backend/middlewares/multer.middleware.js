@@ -1,9 +1,10 @@
 import multer from "multer";
 import fs from "fs";
+import path from "path";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "/public/temp");
+    cb(null, "./public/temp");
   },
   filename: (req, file, cb) => {
     const randomString = Math.random().toString(36).substring(2, 10);
