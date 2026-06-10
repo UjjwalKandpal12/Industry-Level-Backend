@@ -2,7 +2,10 @@ import User from "../models/video/user.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
-import { uploadOnCloudinary } from "../services/cloudinary.service.js";
+import {
+  uploadOnCloudinary,
+  deleteOnCloudinary,
+} from "../services/cloudinary.service.js";
 import fs from "fs";
 import jwt from "jsonwebtoken";
 const generateTokens = async (userId) => {
@@ -252,6 +255,13 @@ export const updateAvatar = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Avatar is required");
   }
   const avatar = await uploadOnCloudinary(avatarLocalPath);
+  //delete old image
+  const userAvatar = await User.findById(req.user?._id);
+  if (!userAvatar?.avatar) {
+    throw new ApiError(404, "User has no avatar to delete");
+  }
+  await deleteOnCloudinary(userAvatar.avatar);
+
   if (!avatar.url) {
     throw new ApiError(500, "Failed to upload avatar");
   }
