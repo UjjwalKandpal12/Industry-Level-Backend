@@ -119,3 +119,7 @@ dist
 
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Node
 .DS_Store
+
+# .md files
+backend_roadmap.md
+mongodb_aggregation_guide.md
